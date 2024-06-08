@@ -1,24 +1,48 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import Dashboard from "./components/Dashboard";
+import Settings from "./components/Settings";
+import Button from "@mui/material/Button";
+import CssBaseline from "@mui/material/CssBaseline";
+
+const lightTheme = createTheme({
+  palette: {
+    mode: "light",
+  },
+});
+
+const darkTheme = createTheme({
+  palette: {
+    mode: "dark",
+  },
+});
 
 function App() {
+  const [theme, setTheme] = useState(lightTheme);
+
+  const toggleTheme = () => {
+    setTheme((prevTheme) =>
+      prevTheme === lightTheme ? darkTheme : lightTheme
+    );
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Router>
+        <Button
+          onClick={toggleTheme}
+          style={{ position: "absolute", top: 10, right: 10 }}
         >
-          Learn React
-        </a>
-      </header>
-    </div>
+          Toggle Theme
+        </Button>
+        <Routes>
+          <Route path="/settings" element={<Settings />} />
+          <Route path="/" element={<Dashboard />} />
+        </Routes>
+      </Router>
+    </ThemeProvider>
   );
 }
 
